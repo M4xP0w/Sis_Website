@@ -9,6 +9,9 @@ export default {
       colors: {
         brandPink: "#FF4F8B",
         brandBlue: "#3C6FFF",
+        skyStart: "#b8dcff",
+        skyEnd: "#fff4da",
+        dirt: "#d9ab76",
       },
       fontFamily: {
         cedar: ["Cedarville", "cursive"],

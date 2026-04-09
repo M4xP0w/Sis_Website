@@ -8,9 +8,8 @@ import midHill from "../assets/hills.png";
 import stella from "../assets/sustainablestellacutout.png";
 import friend from "../assets/sustainablestellaothergirl.png";
 import paper from "../assets/paper.webm";
-import sign from "../assets/Emnstella.webm";
+import sign from "../assets/EmnStella.webm";
 import facpath from "../assets/backdropv2.png";
-import clouds from "../assets/clouds.webm";
 import hedge from "../assets/hedge.png";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -61,51 +60,6 @@ export default function Hero() {
         className="absolute inset-0 w-full h-full object-cover object-top"
       />
 
-      {/* Clouds First  
-      <video
-        id="clouds"
-        src={clouds}
-        autoPlay
-        muted
-        playsInline
-        className="
-          absolute top-[-1%] left-[6%] 
-          -translate-x-1/4
-          w-[100vw] max-w-[600px] object-cover z-10
-        
-        "
-      />
-
-      {/* Clouds Second 
-      <video
-        id="clouds"
-        src={clouds}
-        autoPlay
-        muted
-        playsInline
-        className="
-          absolute top-[-1%] left-[12%] 
-          -translate-x-1/4
-          w-[100vw] max-w-[600px] object-cover z-10
-           animate-fade delay-500
-        "
-      />
-
-      {/* Clouds Third 
-      <video
-        id="clouds2"
-        src={clouds}
-        autoPlay
-        muted
-        playsInline
-        className="
-          absolute top-[-1%] left-[25.7%] 
-          -translate-x-1/4
-          w-[100vw] max-w-[600px] object-cover z-10
-          animate-fade delay-900
-        "
-      /> */}
-
       {/* paper video */}
       <video
         id="paperVid"
@@ -143,7 +97,7 @@ export default function Hero() {
     h-[60vh]      /* phones: 60% of viewport height */
     md:h-[45vh]   /* tablets and up: 45% of viewport height */
     lg:h-[70vh]   /* desktops and up: 70% of viewport height */
-    lg:bottom-[-17vh]       /* desktops slide a percent of the view below */a
+    lg:bottom-[-17vh]       /* desktops slide a percent of the view below */
 `}
         style={{ backgroundImage: `url(${midHill})` }}
       />
