@@ -1,140 +1,72 @@
-// src/sections/Hero.jsx
-import { useEffect, useRef } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
 import treesnhills from "../assets/treesnhills.png";
-import midHill from "../assets/hills.png";
+import gigiGardenCutout from "../assets/gigigardencutout.png";
 import stella from "../assets/sustainablestellacutout.png";
 import friend from "../assets/sustainablestellaothergirl.png";
-import paper from "../assets/paper.webm";
-import sign from "../assets/EmnStella.webm";
 import facpath from "../assets/backdropv2.png";
-import hedge from "../assets/hedge.png";
-
-gsap.registerPlugin(ScrollTrigger);
 
 export default function Hero() {
-  const root = useRef(null);
-
-  // light parallax on the hill
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.to("#midHill", {
-        y: 30,
-        scrollTrigger: { trigger: root.current, start: "top top", scrub: true },
-      });
-
-      /* paper video pop-in */
-      gsap.from("#paperVid", {
-        opacity: 0,
-        y: -60,
-        scale: 0.8,
-        duration: 0.8,
-        ease: "power2.out",
-        scrollTrigger: { trigger: root.current, start: "top 80%" }, // fires once
-      });
-    }, root);
-    return () => ctx.revert();
-  }, []);
-
   return (
     <section
-      ref={root}
       id="hero"
-      className="scene text-white bg-gradient-to-b from-skyStart to-skyEnd"
+      className="scene overflow-visible bg-gradient-to-b from-skyStart to-skyEnd text-white"
     >
-      {/* ── 1 ▸ factory backdrop ─────────────────────── */}
       <img
         src={facpath}
         alt=""
         aria-hidden="true"
-        className="absolute inset-0 w-full h-full object-cover object-top"
+        className="
+          absolute inset-0 h-full w-full object-cover object-top
+          sm:translate-y-[-8px] sm:scale-[1.02]
+          md:translate-y-[-8px]
+          lg:translate-y-[-100px] lg:translate-x-[200px] lg:scale-[1.4]
+          
+        "
       />
 
-      {/* ── 1 ▸ treesnhills fills every pixel ─────────────────────── */}
       <img
         src={treesnhills}
         alt=""
         aria-hidden="true"
-        className="absolute inset-0 w-full h-full object-cover object-top"
+        className="absolute inset-0 h-full w-full object-cover object-top"
       />
 
-      {/* paper video */}
-      <video
-        id="paperVid"
-        src={paper}
-        autoPlay
-        muted
-        playsInline
+      {/* Friend cutout: bottom moves up/down, left moves sideways, w/max-w control size. */}
+      <img
+        src={friend}
+        alt="Sustainable Stella friend"
         className="
-          absolute top-[-2%] left-[66%]
-          -translate-x-1/3
-          w-[100vw] max-w-[1110px] object-cover z-10
+          absolute bottom-[12%] left-[64%] z-20
+          w-[56vw] max-w-[240px] -translate-x-1/2 drop-shadow-lg
+          sm:bottom-[9%] sm:left-[58%] sm:w-[44vw] sm:max-w-[320px]
+          md:bottom-[8%] md:left-1/3 md:w-[40vw] md:max-w-[480px] md:-translate-x-1/1
+          lg:w-[70vw] lg:max-w-[700px] lg:-translate-x-[35%] lg:-translate-y-[-10%]
         "
       />
 
-      {/* Signature of Emilee & Stella */}
-      <video
-        id="sign"
-        src={sign}
-        autoPlay
-        muted
-        playsInline
+      {/* Gigi garden cutout: bottom moves up/down, left moves sideways, w/max-w control size. */}
+      <img
+        src={gigiGardenCutout}
+        alt="Gigi and Stella gardening"
         className="
-          absolute top-[-5%] left-[64%] 
-          -translate-x-1/4
-          w-[100vw] max-w-[920px] object-cover z-10
+          absolute bottom-[10%] left-[50%] z-20
+          w-[58vw] max-w-[250px] -translate-x-1/2 drop-shadow-lg
+          sm:bottom-[7%] sm:left-[52%] sm:w-[48vw] sm:max-w-[340px]
+          md:bottom-[7%] md:left-[55%] md:w-[42vw] md:max-w-[520px]
+          lg:bottom-[5%] lg:left-[75%] lg:w-[42vw] lg:max-w-[780px]
         "
       />
 
-      {/* mid-ground hill with responsive heights */}
-      <div
-        id="midHill"
-        className={`
-    absolute bottom-0 w-full overflow-hidden
-    bg-bottom bg-no-repeat bg-[length:100%_auto]
-    h-[60vh]      /* phones: 60% of viewport height */
-    md:h-[45vh]   /* tablets and up: 45% of viewport height */
-    lg:h-[70vh]   /* desktops and up: 70% of viewport height */
-    lg:bottom-[-17vh]       /* desktops slide a percent of the view below */
-`}
-        style={{ backgroundImage: `url(${midHill})` }}
-      />
-      {/* ── 3 ▸ Stella cut-out on the hill ─────────────────────── */}
+      {/* Stella cutout: bottom moves up/down, left moves sideways, w/max-w control size. */}
       <img
         src={stella}
         alt="Sustainable Stella"
         className="
-          absolute bottom-[8%] left-1/4 -translate-x-1/2
-          w-[40vw] max-w-[480px] sm:w-[50vw] sm:max-w-[350px]
-          drop-shadow-lg z-20
+          absolute bottom-[13%] left-[36%] z-20
+          w-[42vw] max-w-[170px] -translate-x-1/2 drop-shadow-lg
+          sm:bottom-[10%] sm:left-[34%] sm:w-[34vw] sm:max-w-[220px]
+          md:bottom-[8%] md:left-1/4 md:w-[40vw] md:max-w-[480px]
+          lg:w-[40vw] lg:max-w-[360px] lg:-translate-x-[95%] lg:-translate-y-[-5%]
         "
-      />
-      {/* ── 3 ▸ Stella cut-out on the hill ─────────────────────── */}
-      <img
-        src={friend}
-        alt="Sustainable Stella"
-        className="
-          absolute bottom-[8%] left-1/3 -translate-x-1/1
-          w-[40vw] max-w-[480px] sm:w-[50vw] sm:max-w-[800px]
-          drop-shadow-lg z-20
-        "
-      />
-
-      {/* ── 1 ▸ hedge ─*/}
-      <img
-        src={hedge}
-        alt=""
-        aria-hidden="true"
-        className=" absolute inset-0          /* pin to edges of parent  */
-         w-full h-full             /* parent’s full size      */
-         object-contain            /* fit whole video, no crop*/
-
-         z-10
-       translate-y-[-35%]
-         pointer-events-none
-"
       />
     </section>
   );

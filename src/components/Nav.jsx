@@ -1,73 +1,128 @@
-import clouds from "../assets/clouds.webm"; // adjust the path
+import clouds from "../assets/clouds.png";
+import sign from "../assets/EmnStella.webm";
 
-function CloudButton({ label, onClick, featured = false, delayClass = "" }) {
+// Tailwind breakpoint reminder:
+// no prefix = phones / default, sm = 640px+, md = 768px+, lg = 1024px+.
+// Example: "top-12 md:top-20" means top-12 on phones, then top-20 on tablets/desktops.
+function NavButton({ label, onClick, delayClass = "" }) {
   return (
     <button
       type="button"
       onClick={onClick}
-      className={`group relative isolate inline-flex min-w-[130px] items-center justify-center px-7 py-4 text-base font-semibold uppercase tracking-[0.2em] text-slate-900 transition duration-300 hover:-translate-y-1 sm:min-w-[150px] sm:text-lg ${featured ? "sm:min-w-[190px]" : ""} animate-fade ${delayClass}`}
+      className={`
+        animate-fade bg-transparent px-1 py-1 font-skyCur leading-none
+        text-[1.45rem] text-slate-900 drop-shadow-[0_2px_2px_rgba(255,255,255,0.75)]
+        transition hover:scale-105
+        sm:text-[1.95rem]
+        md:text-[4rem]
+        lg:text-[6rem]
+        ${delayClass}
+      `}
     >
-      <span className="absolute inset-0 rounded-full bg-white/92 shadow-[0_18px_45px_rgba(15,23,42,0.18)] backdrop-blur-sm transition duration-300 group-hover:bg-white" />
-      <span className="absolute -left-3 bottom-1 h-8 w-8 rounded-full bg-white/92 shadow-[0_12px_24px_rgba(15,23,42,0.12)] transition duration-300 group-hover:bg-white" />
-      <span className="absolute left-5 -top-2 h-7 w-7 rounded-full bg-white/92 shadow-[0_12px_24px_rgba(15,23,42,0.12)] transition duration-300 group-hover:bg-white" />
-      <span className="absolute right-4 top-1 h-9 w-9 rounded-full bg-white/92 shadow-[0_12px_24px_rgba(15,23,42,0.12)] transition duration-300 group-hover:bg-white" />
-      <span className="relative z-10 font-skyCur drop-shadow-sm">{label}</span>
+      {label}
     </button>
   );
 }
 
 export default function Nav() {
-  const jump = (id) =>
-    document.getElementById(id)?.scrollIntoView({
+  const jump = (id) => {
+    if (id === "hero") {
+      if (window.lenis) {
+        window.lenis.resize();
+        window.lenis.scrollTo("top", {
+          duration: 1.2,
+          force: true,
+          lock: true,
+          onComplete: () => {
+            // Tiny final correction after the smooth scroll, so Home reaches true 0.
+            window.lenis?.scrollTo(0, { immediate: true, force: true });
+          },
+        });
+        return;
+      }
+
+      window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+      return;
+    }
+
+    const target = document.getElementById(id);
+
+    if (target && window.lenis) {
+      window.lenis.scrollTo(target, { force: true });
+      return;
+    }
+
+    target?.scrollIntoView({
       behavior: "smooth",
       block: "start",
     });
+  };
 
   const links = [
-    { id: "hero", label: "Home", featured: true, delayClass: "delay-500" },
+    { id: "hero", label: "Home", delayClass: "delay-500" },
     { id: "books", label: "Books", delayClass: "delay-900" },
-    { id: "about", label: "About", delayClass: "delay-1500" },
+    { id: "author", label: "Author", delayClass: "delay-1500" },
   ];
 
   return (
-    <header id="nav" className="pointer-events-none fixed inset-x-0 top-0 z-50">
-      <div className="relative mx-auto h-[220px] max-w-6xl px-4 sm:h-[250px]">
-        <div className="absolute inset-0">
-          <video
-            src={clouds}
-            autoPlay
-            muted
-            playsInline
-            className="absolute left-[6%] top-[-3%] w-[56vw] max-w-[420px] object-cover opacity-85 animate-fade"
-          />
-          <video
-            src={clouds}
-            autoPlay
-            muted
-            playsInline
-            className="absolute left-[30%] top-[-6%] w-[56vw] max-w-[450px] object-cover opacity-85 animate-fade delay-500"
-          />
-          <video
-            src={clouds}
-            autoPlay
-            muted
-            playsInline
-            className="absolute left-[56%] top-[-2%] w-[56vw] max-w-[400px] object-cover opacity-85 animate-fade delay-900"
-          />
-        </div>
+    <header
+      id="nav"
+      className="
+        pointer-events-none fixed inset-x-0 top-0 z-50
+        h-[180px]
+        sm:h-[235px]
+        md:h-[315px]
+        lg:h-[400px]
+      "
+    >
+      {/* Cloud bar: top moves it up/down, h controls height, bg-[length] controls cloud scale. */}
+      <div
+        aria-hidden="true"
+        className="
+          absolute inset-x-0 bg-bottom bg-repeat-x
+          top-[-54px] h-[260px] bg-[length:auto_260px]
+          drop-shadow-[0_18px_35px_rgba(15,23,42,0.12)]
+          sm:top-[-70px] sm:h-[330px] sm:bg-[length:auto_330px]
+          md:top-[-145px] md:h-[450px] md:bg-[length:auto_450px]
+          lg:top-[-10px] lg:h-[400px] lg:bg-[length:auto_460px]
+        "
+        style={{ backgroundImage: `url(${clouds})` }}
+      />
 
-        <nav className="pointer-events-auto relative z-10 flex h-full items-start justify-center gap-3 pt-6 sm:gap-6 sm:pt-10">
-          {links.map((link) => (
-            <CloudButton
-              key={link.id}
-              label={link.label}
-              featured={link.featured}
-              delayClass={link.delayClass}
-              onClick={() => jump(link.id)}
-            />
-          ))}
-        </nav>
-      </div>
+      {/* Button group: right moves sideways, top moves up/down, gap changes space between buttons. */}
+      <nav
+        className="
+          pointer-events-auto absolute z-10 flex items-center
+          right-5 top-12 gap-5
+          sm:right-8 sm:top-14 sm:gap-7
+          md:right-14 md:top-14 md:gap-12
+          lg:top-4 lg:gap-8
+        "
+      >
+        {links.map((link) => (
+          <NavButton
+            key={link.id}
+            label={link.label}
+            delayClass={link.delayClass}
+            onClick={() => jump(link.id)}
+          />
+        ))}
+      </nav>
+
+      {/* Emilee/Stella sign: left moves sideways, top moves up/down, w/max-w change size. */}
+      <video
+        src={sign}
+        autoPlay
+        muted
+        playsInline
+        className="
+          pointer-events-none absolute z-10 object-contain
+          left-1 top-3 w-[58vw] max-w-[320px]
+          sm:left-3 sm:top-2 sm:w-[46vw] sm:max-w-[450px]
+          md:left-8 md:top-[-34px] md:w-[40vw] md:max-w-[660px]
+          lg:left-10 lg:top-[-100px] lg:w-[30vw] lg:max-w-[800px]
+        "
+      />
     </header>
   );
 }
