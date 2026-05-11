@@ -1,12 +1,46 @@
-# React + Vite
+# Sis Website
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A custom React website built for Emilee Powell and her children’s book series featuring Stella.
 
-Currently, two official plugins are available:
+This project started as a personal site for my sister, but it is also being used as a hands on way to learn modern front end development, responsive layouts, animations, Tailwind CSS, and React project structure.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## About the project
 
-## Expanding the ESLint configuration
+The site is designed as a bright, storybook style author and book page. It includes a custom hero section, animated navigation, book sections, author information, responsive image placement, and mobile specific fixes for browser viewport behavior.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Current sections include:
+
+* Home
+* Books
+* Author
+
+Featured books:
+
+* Sustainable Stella
+* Gigi's Golden Garden
+
+## Tech stack
+
+* React
+* Vite
+* JavaScript
+* Tailwind CSS
+* CSS
+* Lenis smooth scrolling
+* GSAP
+* ESLint
+* Prettier
+* Husky
+
+## Features
+
+* Responsive React layout
+* Custom illustrated hero scene
+* Animated cloud navigation
+* Smooth scrolling between page sections
+* Mobile specific APNG fallback for transparent animation
+* Desktop WebM animation support
+* Custom font setup
+* Tailwind based styling
+* Book cards with external Barnes & Noble links
+* Author section for Emilee Powell
