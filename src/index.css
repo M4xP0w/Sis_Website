@@ -8,11 +8,29 @@ body,
   min-height: 100%;
   margin: 0;
   overflow-x: hidden;
+  /* When mobile browsers rubber-band past the page edges, show site colors instead of white. */
+  background: linear-gradient(180deg, #b8dcff 0%, #fff4da 38%, #d6cf77 100%);
 }
 
 .scene {
-  @apply relative h-screen w-full;
+  @apply relative w-full;
+  /* Use the stable mobile viewport so Firefox/Brave toolbar hide/show
+     does not resize the hero and shift the cutouts around while scrolling. */
+  height: 100vh;
+  height: 100svh;
+  min-height: 100vh;
+  min-height: 100svh;
 }
+
+@media (max-width: 767px) {
+  .scene {
+    /* Freeze the hero height to the phone's initial loaded height.
+       This avoids the mobile browser bottom bar changing the hero size while scrolling. */
+    height: var(--app-height, 100svh);
+    min-height: var(--app-height, 100svh);
+  }
+}
+
 .layer {
   @apply absolute inset-0 will-change-transform;
 }

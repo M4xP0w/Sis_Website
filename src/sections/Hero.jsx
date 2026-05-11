@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 import treesnhills from "../assets/treesnhills.png";
 import gigiGardenCutout from "../assets/gigigardencutout.png";
 import stella from "../assets/sustainablestellacutout.png";
@@ -5,6 +7,48 @@ import friend from "../assets/sustainablestellaothergirl.png";
 import facpath from "../assets/backdropv2.png";
 
 export default function Hero() {
+  const [phoneHeightTier, setPhoneHeightTier] = useState("base");
+
+  useEffect(() => {
+    const updatePhoneHeightTier = () => {
+      if (window.innerWidth >= 640) {
+        setPhoneHeightTier("base");
+        return;
+      }
+
+      const phoneHeight = window.screen?.height ?? window.innerHeight;
+
+      if (phoneHeight >= 800) {
+        setPhoneHeightTier("tall");
+        return;
+      }
+
+      if (phoneHeight <= 700) {
+        setPhoneHeightTier("short");
+        return;
+      }
+
+      setPhoneHeightTier("base");
+    };
+
+    updatePhoneHeightTier();
+    window.addEventListener("orientationchange", updatePhoneHeightTier);
+
+    return () => {
+      window.removeEventListener("orientationchange", updatePhoneHeightTier);
+    };
+  }, []);
+
+  // Phone-only Stella layout:
+  // use screen height chosen on load/orientation change instead of live viewport height,
+  // so mobile browser bars hiding/showing during scroll does not switch Stella layouts.
+  const stellaPhoneHeightClass =
+    phoneHeightTier === "tall"
+      ? "w-[clamp(390px,46vw,430px)] translate-y-[clamp(-10%,-5%,5%)]"
+      : phoneHeightTier === "short"
+        ? "w-[clamp(330px,40vw,380px)] translate-y-[clamp(4%,7%,10%)]"
+        : "";
+
   return (
     <section
       id="hero"
@@ -16,17 +60,19 @@ export default function Hero() {
           These cutouts use max-w-none so the w classes are the only size controls. */}
 
       {/* Factory/background path layer:
-          PHONE: edit no-prefix values below when DevTools width is under 640px.
-          PHONE X/Y/SIZE:
-          - object-position first number = x.
-          - object-position second number = y.
-          - scale = size/zoom.
-          SM: edit sm:* values for 640px-767px.
-          MD: edit md:* values for 768px-1023px.
-          LG: edit lg:* values for 1024px and wider.
-          Use object-position to pan the image without revealing blank edges.
-          First number = x position. Smaller shows more left side, bigger shows more right side.
-          Second number = y position. Smaller is higher, bigger is lower. */}
+          PHONE ONLY:
+          - Edit the no-prefix values below for screens under 640px.
+          - Edit the two [@media(...)] lines only if you want different phone heights to behave differently.
+          X/Y/SIZE GUIDE:
+          - [object-position:X_Y] = x and y position inside the image.
+          - translate-y = extra up/down nudge after the image is placed.
+          - scale = zoom/size.
+          BREAKPOINT GUIDE:
+          - sm = 640px-767px
+          - md = 768px-1023px
+          - lg = 1024px-1279px
+          - xl = 1280px-1535px
+          - 2xl = 1536px+ */}
       <img
         src={facpath}
         alt=""
@@ -34,7 +80,11 @@ export default function Hero() {
         className="
           absolute inset-0 h-full w-full object-cover
           origin-top will-change-transform
-          [object-position:clamp(15%,30vw,40%)] translate-y-[clamp(-18%,-60%,-100%)] scale-[1.2]
+
+          [object-position:clamp(15%,30vw,40%)]
+          translate-y-[clamp(-18%,-60%,-100%)]
+          scale-[1.2]
+
           sm:[object-position:50%_0%] sm:scale-[1.02]
           md:[object-position:20%_50%] md:scale-[1.4] md:translate-y-[clamp(-20%,-40%,-60%)] md:translate-x-[clamp(5%,5%,30%)]
           lg:[object-position:35%_50%] lg:translate-y-[clamp(-10%,-20%,-30%)]
@@ -46,15 +96,13 @@ export default function Hero() {
       />
 
       {/* Trees and hills layer:
-          PHONE: edit no-prefix values below when DevTools width is under 640px.
-          SM: edit sm:* values for 640px-767px.
-          MD: edit md:* values for 768px-1023px.
-          LG: edit lg:* values for 1024px and wider.
-          Use object-position to pan the image without revealing blank edges.
-          First number = x position. Smaller shows more left side, bigger shows more right side.
-          Second number = y position. Smaller is higher, bigger is lower.
-          Do not use translate-x on this full-width background unless you also oversize it,
-          because translate-x slides the whole image and reveals blank space. */}
+          PHONE ONLY:
+          - Edit the no-prefix values below for screens under 640px.
+          - Keep using object-position instead of translate-x so the background does not reveal blank space.
+          X/Y/SIZE GUIDE:
+          - [object-position:X_Y] = x and y position inside the image.
+          - scale = zoom/size.
+          - Smaller x shows more of the left side. Bigger x shows more of the right side. */}
       <img
         src={treesnhills}
         alt=""
@@ -62,7 +110,9 @@ export default function Hero() {
         className="
           absolute inset-0 h-full w-full object-cover
           origin-center will-change-transform
+
           [object-position:30%_0%] scale-[1.06]
+
           sm:[object-position:50%_18%] sm:scale-[1.08]
           md:[object-position:clamp(22%,calc(56%-4vw),50%)_0%] md:scale-[1]
           lg:[object-position:35%_0%] lg:scale-[1.08]
@@ -103,6 +153,7 @@ export default function Hero() {
 
       {/* Friend cutout:
           PHONE/no-prefix = under 640px, SM = 640px+, MD = 768px+, LG = 1024px+, XL = 1280px+.
+          This one is hidden on phones right now, so its first visible breakpoint is md.
           For 768x1080 tablet size, edit the md:* lines.
           For 1440x1080 size, edit xl:w.
           bottom moves up/down, left moves sideways, w/max-w change size,
@@ -135,29 +186,34 @@ export default function Hero() {
       />
 
       {/* Stella cutout:
-          PHONE/no-prefix = under 640px, SM = 640px+, MD = 768px+, LG = 1024px+, XL = 1280px+.
-          PHONE X/Y/SIZE:
-          - left = x.
-          - bottom = y.
+          PHONE ONLY:
+          - Edit the no-prefix values below for normal phones under 640px.
+          - Edit the [@media(max-width:639px)...] lines if you want tall phones and short phones to behave differently.
+          PHONE X/Y/SIZE GUIDE:
+          - left = main x position.
+          - bottom = main y position.
           - w = size.
-          - translate-x / translate-y = tiny final nudges.
-          For 768x1080 tablet size, edit the md:* lines.
-          For 1440x1080 size, edit xl:w.
-          bottom moves up/down, left moves sideways, w/max-w change size,
-          translate-x/translate-y fine-tune the final placement. */}
+          - translate-x = final left/right nudge.
+          - translate-y = final up/down nudge.
+          BREAKPOINT GUIDE:
+          - sm = 640px-767px
+          - md = 768px-1023px
+          - lg = 1024px-1279px
+          - xl = 1280px-1535px
+          - 2xl = 1536px+ */}
       <img
         src={stella}
         alt="Sustainable Stella"
         className="
           absolute z-20 max-w-none drop-shadow-lg
-          bottom-[clamp(70px,13vw,100px)] left-[clamp(32%,36vw,46%)]
+
+          bottom-[clamp(70px,13vw,100px)]
+          left-[clamp(32%,36vw,46%)]
           w-[clamp(350px,42vw,490px)]
-          [@media(max-width:639px)_and_(min-height:800px)]:w-[clamp(390px,46vw,430px)]
-          [@media(max-width:639px)_and_(max-height:700px)]:w-[clamp(330px,40vw,380px)]
           translate-x-[clamp(-48%,-35%,-20%)]
-          translate-y-[clamp(5%,10%,15%)]
-          [@media(max-width:639px)_and_(min-height:800px)]:translate-y-[clamp(-10%,1%,2%)]
-          [@media(max-width:639px)_and_(max-height:700px)]:translate-y-[clamp(4%,7%,10%)]
+          translate-y-[clamp(10%,50%,10%)]
+          ${stellaPhoneHeightClass}
+
           sm:bottom-[clamp(9%,10vw,11%)] sm:left-[clamp(31%,34vw,37%)]
           sm:w-[clamp(200px,34vw,220px)]
           md:bottom-[clamp(55px,calc(35px+4vw),90px)]

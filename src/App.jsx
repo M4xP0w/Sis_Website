@@ -41,9 +41,12 @@ export default function App() {
           src={longHills}
           alt=""
           aria-hidden="true"
+          style={{
+            "--mobile-hill-top": "calc(var(--app-height, 100svh) * 0.40)",
+          }}
           className="
             pointer-events-none absolute left-0 z-[5] w-full object-cover object-top
-            top-[40vh] h-[calc(100%-40vh)]
+            top-[var(--mobile-hill-top)] h-[calc(100%-var(--mobile-hill-top))]
             md:top-[55vh] md:h-[calc(100%-55vh)]
             lg:top-[47vh] lg:h-[calc(100%-47vh)]
           "
