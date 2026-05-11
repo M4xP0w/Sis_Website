@@ -1,9 +1,17 @@
+import { useEffect, useRef, useState } from "react";
+
 import clouds from "../assets/clouds.png";
-import sign from "../assets/EmnStella.webm";
+import mobileSignFull from "../assets/Emilee and Stella_full.apng";
+import mobileSignWritten from "../assets/Emilee and Stella_written.apng";
+import sign from "../assets/Emilee and Stella.webm";
 
 // Tailwind breakpoint reminder:
-// no prefix = phones / default, sm = 640px+, md = 768px+, lg = 1024px+.
-// Example: "top-12 md:top-20" means top-12 on phones, then top-20 on tablets/desktops.
+// no prefix = phones / default, sm = 640px+, md = 768px+, lg = 1024px+, xl = 1280px+, 2xl = 1536px+.
+// A 1440px wide screen uses xl. If xl exists, lg mostly controls 1024px-1279px.
+// A 1920px wide screen uses 2xl, so you can tune it separately from 1440px.
+// clamp(min, preferred, max) changes smoothly between screen sizes instead of jumping.
+// Example: top-[clamp(-65px,calc(60px-8vw),34px)] moves down on small screens
+// and moves up on larger screens without needing a separate value for every width.
 function NavButton({ label, onClick, delayClass = "" }) {
   return (
     <button
@@ -11,11 +19,13 @@ function NavButton({ label, onClick, delayClass = "" }) {
       onClick={onClick}
       className={`
         animate-fade bg-transparent px-1 py-1 font-skyCur leading-none
-        text-[1.45rem] text-slate-900 drop-shadow-[0_2px_2px_rgba(255,255,255,0.75)]
+        text-[clamp(3.1rem,15vw,4.1rem)] text-[#4f7b3a]
+        drop-shadow-[0_2px_2px_rgba(255,255,255,0.75)]
         transition hover:scale-105
-        sm:text-[1.95rem]
-        md:text-[4rem]
-        lg:text-[6rem]
+        sm:text-[clamp(3.6rem,8vw,4.4rem)]
+        md:text-[clamp(3.1rem,7vw,4.8rem)]
+        lg:text-[clamp(4.4rem,5vw,5.5rem)]
+        xl:text-[clamp(5.4rem,4.2vw,6.2rem)]
         ${delayClass}
       `}
     >
@@ -25,6 +35,54 @@ function NavButton({ label, onClick, delayClass = "" }) {
 }
 
 export default function Nav() {
+  const signVideoRef = useRef(null);
+  const isTailLoopingRef = useRef(false);
+  const [showWrittenMobileSign, setShowWrittenMobileSign] = useState(false);
+
+  const tailLoopSeconds = 3;
+  const endBufferSeconds = 0.15;
+  const mobileIntroMs = 5000;
+
+  useEffect(() => {
+    const mobileSignTimer = window.setTimeout(() => {
+      setShowWrittenMobileSign(true);
+    }, mobileIntroMs);
+
+    return () => {
+      window.clearTimeout(mobileSignTimer);
+    };
+  }, []);
+
+  const loopSignTail = () => {
+    const video = signVideoRef.current;
+
+    if (!video || !Number.isFinite(video.duration)) {
+      return;
+    }
+
+    const tailEnd = video.duration - endBufferSeconds;
+    const tailStart = Math.max(0, tailEnd - tailLoopSeconds);
+
+    if (video.currentTime >= tailEnd) {
+      isTailLoopingRef.current = true;
+      video.currentTime = tailStart;
+      video.play().catch(() => {
+        // Browsers can reject play() if the video is interrupted during seeking.
+      });
+    }
+  };
+
+  const getScrollOffset = (id) => {
+    const isMobile = window.matchMedia("(max-width: 767px)").matches;
+
+    // Mobile has the tallest fixed cloud/nav stack, so sections need to stop earlier.
+    if ((id === "books" || id === "author") && isMobile) {
+      return -170;
+    }
+
+    return 0;
+  };
+
   const jump = (id) => {
     if (id === "hero") {
       if (window.lenis) {
@@ -46,16 +104,20 @@ export default function Nav() {
     }
 
     const target = document.getElementById(id);
+    const offset = getScrollOffset(id);
 
     if (target && window.lenis) {
-      window.lenis.scrollTo(target, { force: true });
+      window.lenis.scrollTo(target, { force: true, offset });
       return;
     }
 
-    target?.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
+    if (target) {
+      window.scrollTo({
+        top: target.getBoundingClientRect().top + window.scrollY + offset,
+        left: 0,
+        behavior: "smooth",
+      });
+    }
   };
 
   const links = [
@@ -69,34 +131,46 @@ export default function Nav() {
       id="nav"
       className="
         pointer-events-none fixed inset-x-0 top-0 z-50
-        h-[180px]
-        sm:h-[235px]
-        md:h-[315px]
-        lg:h-[400px]
+        h-[clamp(295px,48vw,430px)]
+        md:h-[clamp(300px,35vw,430px)]
+        lg:h-[clamp(360px,28vw,430px)]
       "
     >
-      {/* Cloud bar: top moves it up/down, h controls height, bg-[length] controls cloud scale. */}
+      {/* Cloud bar:
+          top moves it up/down, h controls the nav's cloud area height,
+          bg-[length] controls how zoomed-in the cloud image looks. */}
       <div
         aria-hidden="true"
         className="
           absolute inset-x-0 bg-bottom bg-repeat-x
-          top-[-54px] h-[260px] bg-[length:auto_260px]
+          top-[clamp(-90px,calc(-48px-4vw),-70px)]
+          h-[clamp(345px,64vw,470px)]
+          bg-[length:auto_clamp(360px,70vw,500px)]
           drop-shadow-[0_18px_35px_rgba(15,23,42,0.12)]
-          sm:top-[-70px] sm:h-[330px] sm:bg-[length:auto_330px]
-          md:top-[-145px] md:h-[450px] md:bg-[length:auto_450px]
-          lg:top-[-10px] lg:h-[400px] lg:bg-[length:auto_460px]
+          md:top-[clamp(-16px,calc(20px-3vw),12px)]
+          md:h-[clamp(280px,38vw,430px)]
+          md:bg-[length:auto_clamp(280px,38vw,430px)]
+          lg:top-[clamp(-20px,calc(22px-3vw),-10px)]
+          lg:h-[clamp(360px,28vw,430px)]
+          lg:bg-[length:auto_clamp(430px,32vw,500px)]
         "
         style={{ backgroundImage: `url(${clouds})` }}
       />
 
-      {/* Button group: right moves sideways, top moves up/down, gap changes space between buttons. */}
+      {/* Button group: */}
       <nav
         className="
           pointer-events-auto absolute z-10 flex items-center
-          right-5 top-12 gap-5
-          sm:right-8 sm:top-14 sm:gap-7
-          md:right-14 md:top-14 md:gap-12
-          lg:top-4 lg:gap-8
+          left-1/2 top-[clamp(10px,26vw,126px)] -translate-x-1/2 -translate-y-[clamp(10%,80%,200%)]
+          gap-[clamp(1.5rem,1.5vw,1.95rem)]
+          sm:top-[clamp(110px,21vw,146px)] sm:gap-[clamp(0.8rem,2vw,1.25rem)]
+          md:left-auto md:right-[clamp(1rem,4vw,3.5rem)]
+          md:top-[clamp(1.5rem,20vw,5rem)] md:gap-[clamp(1rem,2.5vw,2rem)] md:translate-x-0
+          lg:right-[clamp(1.25rem,3vw,4rem)] lg:top-[clamp(1rem,1.6vw,2rem)]
+          lg:gap-[clamp(1.5rem,2vw,3rem)] lg:translate-y-[clamp(-10%,0%,-20%)]
+          xl:right-[clamp(2rem,3vw,5rem)] xl:top-[clamp(0.75rem,1.2vw,1.75rem)]
+          xl:gap-[clamp(1.75rem,2vw,3.25rem)]
+          2xl:right-[clamp(2rem,3vw,5rem)] 2xl:top-[clamp(0.75rem,1.2vw,1.75rem)] 2xl:gap-[clamp(1.75rem,2vw,3.25rem)]
         "
       >
         {links.map((link) => (
@@ -109,18 +183,63 @@ export default function Nav() {
         ))}
       </nav>
 
-      {/* Emilee/Stella sign: left moves sideways, top moves up/down, w/max-w change size. */}
+      {/* Emilee/Stella sign:
+          top moves it up/down, left moves it sideways, w/max-w change size.
+          Phones stack this centered above the buttons.
+          This uses clamp so the sign moves down as the screen gets smaller
+          instead of getting cut off by the top of the browser. */}
+      <div
+        className="
+          pointer-events-none absolute z-10 object-contain md:hidden
+          left-1/2 top-[-8px] w-[100vw] max-w-[420px] -translate-x-1/2 translate-y-[clamp(-35%,-80%,-300%)]
+          sm:top-[-12px] sm:w-[72vw] sm:max-w-[430px]
+        "
+      >
+        {/* Mobile uses APNG because some phone browsers render transparent WebM as black.
+            Both mobile APNGs stay mounted so the transition can overlap without a blank frame. */}
+        <div className="relative">
+          <img
+            src={mobileSignFull}
+            alt="Emilee and Stella"
+            className={`
+              block h-auto w-full object-contain transition-opacity duration-300
+              ${showWrittenMobileSign ? "opacity-0" : "opacity-100"}
+            `}
+          />
+          <img
+            src={mobileSignWritten}
+            alt=""
+            aria-hidden="true"
+            className={`
+              absolute inset-0 h-auto w-full object-contain transition-opacity duration-300
+              ${showWrittenMobileSign ? "opacity-100" : "opacity-0"}
+            `}
+          />
+        </div>
+      </div>
+
       <video
+        ref={signVideoRef}
         src={sign}
         autoPlay
         muted
         playsInline
+        onLoadedMetadata={() => {
+          isTailLoopingRef.current = false;
+        }}
+        onTimeUpdate={loopSignTail}
+        onEnded={loopSignTail}
         className="
-          pointer-events-none absolute z-10 object-contain
-          left-1 top-3 w-[58vw] max-w-[320px]
-          sm:left-3 sm:top-2 sm:w-[46vw] sm:max-w-[450px]
-          md:left-8 md:top-[-34px] md:w-[40vw] md:max-w-[660px]
-          lg:left-10 lg:top-[-100px] lg:w-[30vw] lg:max-w-[800px]
+          pointer-events-none absolute z-10 hidden h-auto object-contain md:block
+          md:left-[clamp(0.75rem,2vw,2.5rem)]
+          md:top-[clamp(-58px,calc(42px-12vw),10px)]
+          md:w-[clamp(390px,52vw,620px)] md:max-w-[620px]
+          lg:left-10 lg:top-[clamp(-65px,calc(-40px-15vw),-50px)]
+          lg:w-[clamp(390px,32vw,580px)] lg:max-w-[800px]
+          xl:left-[clamp(2.5rem,3vw,4rem)] xl:top-[clamp(-95px,calc(10px-7vw),-70px)]
+          xl:w-[clamp(530px,30vw,720px)] xl:max-w-[720px]
+          2xl:left-10 2xl:top-[clamp(-240px,calc(-70px-2vw),-50px)]
+          2xl:w-[30vw] 2xl:max-w-[800px]
         "
       />
     </header>

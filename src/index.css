@@ -68,6 +68,7 @@ body,
   opacity: 0; /* start invisible   */
   animation: fade-in 0.9s ease-out forwards;
 }
+
 .delay-1500 {
   animation-delay: 1.5s;
 }

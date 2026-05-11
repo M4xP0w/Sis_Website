@@ -3,6 +3,7 @@ import useLenis from "./lenis";
 import Nav from "./components/Nav";
 import Hero from "./sections/Hero";
 import longHills from "./assets/longhills.png";
+import emileePortrait from "./assets/emilee.png";
 import gigiGardenCover from "./assets/gigigarden.jpg";
 import sustainableStellaCover from "./assets/sustainablestella.png";
 
@@ -68,7 +69,7 @@ export default function App() {
                 <h2 className="font-skyCur text-5xl leading-none text-emerald-950 drop-shadow-[0_2px_0_rgba(255,255,255,0.55)] md:text-7xl">
                   Books Available
                 </h2>
-                <p className="mt-5 max-w-2xl border-l-4 border-emerald-700/45 bg-[#fff9df]/35 py-3 pl-5 text-lg leading-8 text-emerald-950/80 backdrop-blur-[1px]">
+                <p className="mt-5 max-w-2xl bg-[#fff9df]/35 py-3 pl-5 text-lg leading-8 text-emerald-950/80 backdrop-blur-[1px]">
                   Follow Stella through bright, thoughtful stories about caring
                   for the earth, growing good things, and learning from the
                   people around her.
@@ -85,11 +86,6 @@ export default function App() {
                       ${index % 2 === 1 ? "md:grid-cols-[minmax(0,1fr)_330px]" : ""}
                     `}
                   >
-                    <div
-                      aria-hidden="true"
-                      className="absolute -left-8 top-1/2 hidden h-px w-[calc(100%+4rem)] bg-gradient-to-r from-transparent via-emerald-800/25 to-transparent md:block"
-                    />
-
                     {/* Cover display: simple book-only preview without rounded boxes or extra stand shapes. */}
                     <div
                       className={`relative flex min-h-[360px] items-center justify-center ${
@@ -111,7 +107,7 @@ export default function App() {
 
                     {/* Info area: flat garden note, no rounded bubble/card. */}
                     <div
-                      className={`relative border-y border-emerald-900/20 bg-[#fff9df]/30 px-1 py-8 backdrop-blur-[1px] md:px-6 ${
+                      className={`relative bg-[#fff9df]/30 px-1 py-8 backdrop-blur-[1px] md:px-6 ${
                         index % 2 === 1 ? "md:order-1" : ""
                       }`}
                     >
@@ -149,19 +145,45 @@ export default function App() {
 
           <section
             id="author"
-            className="relative flex min-h-[60vh] scroll-mt-28 items-center px-6 pb-28 pt-8 text-slate-900 md:pt-12"
+            className="relative scroll-mt-28 px-6 pb-28 pt-8 text-slate-900 md:pt-12"
           >
-            <div className="mx-auto max-w-4xl rounded-[32px] bg-white/80 p-8 shadow-[0_25px_80px_rgba(15,23,42,0.14)] ring-1 ring-white/40 backdrop-blur md:p-12">
-              <p className="text-sm font-semibold uppercase tracking-[0.25em] text-brandBlue">
-                Author
-              </p>
-              <h2 className="mt-4 text-4xl font-black md:text-5xl">
-                This section can introduce your sister as the author.
-              </h2>
-              <p className="mt-5 text-lg leading-8 text-slate-700">
-                This area can share more about Emilee, the Sustainable Stella
-                series, and the heart behind these stories.
-              </p>
+            <div className="mx-auto grid max-w-6xl items-center gap-10 md:grid-cols-[340px_minmax(0,1fr)] md:gap-14">
+              {/* Author image: left column, styled like a garden portrait rather than a book card. */}
+              <div className="relative flex min-h-[430px] items-center justify-center">
+                <img
+                  src={emileePortrait}
+                  alt="Emilee Powell"
+                  className="relative z-10 max-h-[520px] w-auto object-contain drop-shadow-[0_24px_42px_rgba(57,85,38,0.26)]"
+                />
+              </div>
+
+              {/* Author note: similar open layout to books, but with a softer letter/trellis flair. */}
+              <div className="relative border-y border-emerald-900/25 bg-[#fff9df]/35 px-2 py-9 backdrop-blur-[1px] md:px-8">
+                <div
+                  aria-hidden="true"
+                  className="absolute -left-5 top-6 hidden h-[calc(100%-3rem)] w-1 bg-emerald-800/35 md:block"
+                />
+                <p className="text-xs font-black uppercase tracking-[0.35em] text-emerald-700">
+                  Author
+                </p>
+                <h2 className="mt-3 font-skyCur text-5xl leading-none text-emerald-950 md:text-6xl">
+                  Meet Emilee Powell
+                </h2>
+                <p className="mt-5 text-lg leading-8 text-emerald-950/75">
+                  Emilee is the author behind Stella&apos;s stories, creating
+                  bright children&apos;s books that invite young readers to care
+                  for the earth, grow good things, and notice the beauty in the
+                  people around them.
+                </p>
+                <p className="mt-4 text-lg leading-8 text-emerald-950/70">
+                  This space can grow into a full author bio with her story,
+                  inspiration, school visits, and contact details.
+                </p>
+                <div className="mt-7 h-px w-full bg-gradient-to-r from-emerald-800/40 via-amber-700/30 to-transparent" />
+                <p className="mt-4 text-sm font-black uppercase tracking-[0.24em] text-emerald-900/55">
+                  Stories rooted in kindness, curiosity, and care.
+                </p>
+              </div>
             </div>
           </section>
         </div>
