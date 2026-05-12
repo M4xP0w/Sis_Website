@@ -44,10 +44,10 @@ export default function Hero() {
   // so mobile browser bars hiding/showing during scroll does not switch Stella layouts.
   const stellaPhoneHeightClass =
     phoneHeightTier === "tall"
-      ? "w-[clamp(300px,38vw,350px)] translate-y-[clamp(5%,8%,12%)]"
+      ? "w-[260px] translate-y-[10%]"
       : phoneHeightTier === "short"
-        ? "w-[clamp(330px,40vw,380px)] translate-y-[clamp(4%,7%,10%)]"
-        : "";
+        ? "w-[210px] translate-y-[10%]"
+        : "w-[280px] translate-y-[10%]";
 
   return (
     <section
@@ -205,14 +205,12 @@ export default function Hero() {
       <img
         src={stella}
         alt="Sustainable Stella"
-        className="
+        className={`
           absolute z-20 max-w-none drop-shadow-lg
 
           bottom-[clamp(70px,13vw,100px)]
           left-[clamp(32%,36vw,46%)]
-          w-[clamp(350px,42vw,490px)]
           translate-x-[clamp(-48%,-35%,-20%)]
-          translate-y-[10%]
           ${stellaPhoneHeightClass}
 
           sm:bottom-[clamp(9%,10vw,11%)] sm:left-[clamp(31%,34vw,37%)]
@@ -230,7 +228,7 @@ export default function Hero() {
           2xl:bottom-[clamp(8%,9vw,11%)] 2xl:left-[clamp(20%,24vw,30%)]
           2xl:w-[clamp(360px,20vw,430px)]
           2xl:translate-x-[clamp(-105%,-94%,-80%)] 2xl:translate-y-[clamp(3%,5%,7%)]
-        "
+        `}
       />
     </section>
   );
