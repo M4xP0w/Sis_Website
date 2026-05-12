@@ -1,9 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 import clouds from "../assets/clouds.png";
 import mobileSignFull from "../assets/Emilee and Stella_full.apng";
 import mobileSignWritten from "../assets/Emilee and Stella_written.apng";
-import sign from "../assets/Emilee and Stella.webm";
 
 // Tailwind breakpoint reminder:
 // no prefix = phones / default, sm = 640px+, md = 768px+, lg = 1024px+, xl = 1280px+, 2xl = 1536px+.
@@ -35,42 +34,17 @@ function NavButton({ label, onClick, delayClass = "" }) {
 }
 
 export default function Nav() {
-  const signVideoRef = useRef(null);
-  const isTailLoopingRef = useRef(false);
-  const [showWrittenMobileSign, setShowWrittenMobileSign] = useState(false);
-
-  const tailLoopSeconds = 3;
-  const endBufferSeconds = 0.15;
-  const mobileIntroMs = 5000;
+  const [showWrittenSign, setShowWrittenSign] = useState(false);
 
   useEffect(() => {
-    const mobileSignTimer = window.setTimeout(() => {
-      setShowWrittenMobileSign(true);
-    }, mobileIntroMs);
+    const signTimer = window.setTimeout(() => {
+      setShowWrittenSign(true);
+    }, 5000);
 
     return () => {
-      window.clearTimeout(mobileSignTimer);
+      window.clearTimeout(signTimer);
     };
   }, []);
-
-  const loopSignTail = () => {
-    const video = signVideoRef.current;
-
-    if (!video || !Number.isFinite(video.duration)) {
-      return;
-    }
-
-    const tailEnd = video.duration - endBufferSeconds;
-    const tailStart = Math.max(0, tailEnd - tailLoopSeconds);
-
-    if (video.currentTime >= tailEnd) {
-      isTailLoopingRef.current = true;
-      video.currentTime = tailStart;
-      video.play().catch(() => {
-        // Browsers can reject play() if the video is interrupted during seeking.
-      });
-    }
-  };
 
   const getScrollOffset = (id) => {
     const isMobile = window.matchMedia("(max-width: 767px)").matches;
@@ -211,7 +185,7 @@ export default function Nav() {
             alt="Emilee and Stella"
             className={`
               block h-auto w-full object-contain transition-opacity duration-300
-              ${showWrittenMobileSign ? "opacity-0" : "opacity-100"}
+              ${showWrittenSign ? "opacity-0" : "opacity-100"}
             `}
           />
           <img
@@ -220,36 +194,12 @@ export default function Nav() {
             aria-hidden="true"
             className={`
               absolute inset-0 h-auto w-full object-contain transition-opacity duration-300
-              ${showWrittenMobileSign ? "opacity-100" : "opacity-0"}
+              ${showWrittenSign ? "opacity-100" : "opacity-0"}
             `}
           />
         </div>
       </div>
 
-      <video
-        ref={signVideoRef}
-        src={sign}
-        autoPlay
-        muted
-        playsInline
-        onLoadedMetadata={() => {
-          isTailLoopingRef.current = false;
-        }}
-        onTimeUpdate={loopSignTail}
-        onEnded={loopSignTail}
-        className="
-          pointer-events-none absolute z-10 hidden h-auto object-contain
-          md:left-[clamp(0.75rem,2vw,2.5rem)]
-          md:top-[clamp(-58px,calc(42px-12vw),10px)]
-          md:w-[clamp(390px,52vw,620px)] md:max-w-[620px]
-          lg:left-10 lg:top-[clamp(-65px,calc(-40px-15vw),-50px)]
-          lg:w-[clamp(390px,32vw,580px)] lg:max-w-[800px]
-          xl:left-[clamp(2.5rem,3vw,4rem)] xl:top-[clamp(-95px,calc(10px-7vw),-70px)]
-          xl:w-[clamp(530px,30vw,720px)] xl:max-w-[720px]
-          2xl:left-10 2xl:top-[clamp(-240px,calc(-70px-2vw),-50px)]
-          2xl:w-[30vw] 2xl:max-w-[800px]
-        "
-      />
     </header>
   );
 }
