@@ -190,9 +190,17 @@ export default function Nav() {
           instead of getting cut off by the top of the browser. */}
       <div
         className="
-          pointer-events-none absolute z-10 object-contain md:hidden
+          pointer-events-none absolute z-10 object-contain
           left-1/2 top-[-8px] w-[100vw] max-w-[420px] -translate-x-1/2 translate-y-[clamp(-35%,-80%,-300%)]
           sm:top-[-12px] sm:w-[72vw] sm:max-w-[430px]
+          md:left-[clamp(0.75rem,2vw,2.5rem)] md:top-[clamp(-58px,calc(42px-12vw),10px)]
+          md:w-[clamp(390px,52vw,620px)] md:max-w-[620px] md:translate-x-0 md:translate-y-0
+          lg:left-10 lg:top-[clamp(-65px,calc(-40px-15vw),-50px)]
+          lg:w-[clamp(390px,32vw,580px)] lg:max-w-[800px]
+          xl:left-[clamp(2.5rem,3vw,4rem)] xl:top-[clamp(-95px,calc(10px-7vw),-70px)]
+          xl:w-[clamp(530px,30vw,720px)] xl:max-w-[720px]
+          2xl:left-10 2xl:top-[clamp(-240px,calc(-70px-2vw),-50px)]
+          2xl:w-[30vw] 2xl:max-w-[800px]
         "
       >
         {/* Mobile uses APNG because some phone browsers render transparent WebM as black.
@@ -230,7 +238,7 @@ export default function Nav() {
         onTimeUpdate={loopSignTail}
         onEnded={loopSignTail}
         className="
-          pointer-events-none absolute z-10 hidden h-auto object-contain md:block
+          pointer-events-none absolute z-10 hidden h-auto object-contain
           md:left-[clamp(0.75rem,2vw,2.5rem)]
           md:top-[clamp(-58px,calc(42px-12vw),10px)]
           md:w-[clamp(390px,52vw,620px)] md:max-w-[620px]

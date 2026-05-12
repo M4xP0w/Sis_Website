@@ -44,7 +44,7 @@ export default function Hero() {
   // so mobile browser bars hiding/showing during scroll does not switch Stella layouts.
   const stellaPhoneHeightClass =
     phoneHeightTier === "tall"
-      ? "w-[clamp(390px,46vw,430px)] translate-y-[clamp(-10%,-5%,5%)]"
+      ? "w-[clamp(300px,38vw,350px)] translate-y-[clamp(5%,8%,12%)]"
       : phoneHeightTier === "short"
         ? "w-[clamp(330px,40vw,380px)] translate-y-[clamp(4%,7%,10%)]"
         : "";
@@ -83,6 +83,7 @@ export default function Hero() {
 
           [object-position:clamp(15%,30vw,40%)]
           translate-y-[clamp(-18%,-60%,-100%)]
+          translate-x-[clamp(-15%,-10%,-5%)]
           scale-[1.2]
 
           sm:[object-position:50%_0%] sm:scale-[1.02]
@@ -211,7 +212,7 @@ export default function Hero() {
           left-[clamp(32%,36vw,46%)]
           w-[clamp(350px,42vw,490px)]
           translate-x-[clamp(-48%,-35%,-20%)]
-          translate-y-[clamp(10%,50%,10%)]
+          translate-y-[10%]
           ${stellaPhoneHeightClass}
 
           sm:bottom-[clamp(9%,10vw,11%)] sm:left-[clamp(31%,34vw,37%)]
@@ -219,10 +220,10 @@ export default function Hero() {
           md:bottom-[clamp(55px,calc(35px+4vw),90px)]
           md:left-[clamp(18%,calc(20%+1vw),30%)]
           md:w-[clamp(300px,calc(240px+16vw),480px)]
-          md:translate-x-[clamp(-45%,-60%,50%)]
+          md:translate-x-[-45%]
           lg:bottom-[clamp(8%,9vw,11%)] lg:left-[clamp(20%,25vw,30%)]
           lg:w-[clamp(300px,40vw,360px)]
-          lg:translate-x-[clamp(-70%,-95%,-80%)] lg:translate-y-[clamp(3%,5%,7%)]
+          lg:translate-x-[-70%] lg:translate-y-[clamp(3%,5%,7%)]
           xl:bottom-[clamp(8%,9vw,11%)] xl:left-[clamp(20%,24vw,30%)]
           xl:w-[clamp(320px,26vw,390px)]
           xl:translate-x-[clamp(-105%,-94%,-80%)] xl:translate-y-[clamp(3%,5%,7%)]

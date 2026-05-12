@@ -133,7 +133,7 @@ export default function App() {
                         <a
                           href={book.link}
                           target="_blank"
-                          rel="noreferrer"
+                          rel="noopener noreferrer"
                           className="border-b-4 border-emerald-950 bg-emerald-800 px-6 py-3 font-bold text-[#fff7d7] shadow-[0_14px_28px_rgba(31,79,45,0.24)] transition hover:-translate-y-1 hover:bg-emerald-950"
                         >
                           View on Barnes & Noble
