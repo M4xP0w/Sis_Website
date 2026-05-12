@@ -44,7 +44,7 @@ export default function Hero() {
   // so mobile browser bars hiding/showing during scroll does not switch Stella layouts.
   const stellaPhoneHeightClass =
     phoneHeightTier === "tall"
-      ? "w-[330px] translate-y-[-5%]"
+      ? "w-[330px] translate-y-[5%]"
       : phoneHeightTier === "short"
         ? "w-[210px] translate-y-[10%]"
         : "w-[280px] translate-y-[10%]";
