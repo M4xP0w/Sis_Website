@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import clouds from "../assets/clouds.png";
+import clouds from "../assets/clouds.webp";
 import mobileSignFull from "../assets/Emilee and Stella_full.apng";
 import mobileSignWritten from "../assets/Emilee and Stella_written.apng";
 

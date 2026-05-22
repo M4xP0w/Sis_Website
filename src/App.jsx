@@ -2,10 +2,19 @@ import useLenis from "./lenis";
 
 import Nav from "./components/Nav";
 import Hero from "./sections/Hero";
-import longHills from "./assets/longhills.png";
-import emileePortrait from "./assets/emilee.png";
-import gigiGardenCover from "./assets/gigigarden.jpg";
-import sustainableStellaCover from "./assets/sustainablestella.png";
+import heroMobile from "./assets/MobileLayout.webp";
+import heroDesktop from "./assets/DesktopLayout.webp";
+import emileePortrait from "./assets/emilee.webp";
+import gigiGardenCover from "./assets/gigigarden.webp";
+import sustainableStellaCover from "./assets/sustainablestella.webp";
+
+// 🔧 Background image Y offset (vw — % of viewport width).
+// Positive value = bg image pushed DOWN. Negative value = pushed UP.
+// One knob per layout.
+const BG_Y_PHONE          = 10; // phones in portrait                 — mobile composite
+const BG_Y_IPAD_PORTRAIT  = 2;  // iPad portrait                      — mobile composite
+const BG_Y_IPAD_LANDSCAPE = 5;  // iPad landscape (1024-1279px)       — desktop composite
+const BG_Y_DESKTOP        = -4;  // phone landscape + laptop + desktop — desktop composite
 
 const featuredBooks = [
   {
@@ -36,21 +45,31 @@ export default function App() {
       <Nav />
 
       <div className="relative overflow-hidden bg-[#d6cf77]">
-        <img
-          id="midHill"
-          src={longHills}
-          alt=""
-          aria-hidden="true"
-          style={{
-            "--mobile-hill-top": "calc(var(--app-height, 100svh) * 0.40)",
-          }}
-          className="
-            pointer-events-none absolute left-0 z-[5] w-full object-cover object-top
-            top-[var(--mobile-hill-top)] h-[calc(100%-var(--mobile-hill-top))]
-            md:top-[55vh] md:h-[calc(100%-55vh)]
-            lg:top-[47vh] lg:h-[calc(100%-47vh)]
-          "
-        />
+        {/* Full-page background — extends behind hero, books, and author.
+            Orientation-based swap: landscape shows the desktop composite,
+            portrait shows the mobile composite (incl. iPad portrait). */}
+        <picture>
+          <source media="(orientation: landscape)" srcSet={heroDesktop} />
+          <img
+            src={heroMobile}
+            alt=""
+            aria-hidden="true"
+            style={{
+              "--bg-y-phone":    `${BG_Y_PHONE}vw`,
+              "--bg-y-ipad":     `${BG_Y_IPAD_PORTRAIT}vw`,
+              "--bg-y-ipad-l":   `${BG_Y_IPAD_LANDSCAPE}vw`,
+              "--bg-y-desktop":  `${BG_Y_DESKTOP}vw`,
+            }}
+            className="
+              pointer-events-none absolute inset-x-0 z-0 w-full h-auto
+              top-[var(--bg-y-phone)]
+              md:portrait:top-[var(--bg-y-ipad)]
+              landscape:top-[var(--bg-y-desktop)]
+              lg:landscape:top-[var(--bg-y-ipad-l)]
+              xl:landscape:top-[var(--bg-y-desktop)]
+            "
+          />
+        </picture>
 
         <Hero />
 

@@ -14,21 +14,12 @@ body,
 
 .scene {
   @apply relative w-full;
-  /* Use the stable mobile viewport so Firefox/Brave toolbar hide/show
-     does not resize the hero and shift the cutouts around while scrolling. */
-  height: 100vh;
-  height: 100svh;
-  min-height: 100vh;
-  min-height: 100svh;
-}
-
-@media (max-width: 767px) {
-  .scene {
-    /* Freeze the hero height to the phone's initial loaded height.
-       This avoids the mobile browser bottom bar changing the hero size while scrolling. */
-    height: var(--app-height, 100svh);
-    min-height: var(--app-height, 100svh);
-  }
+  /* Freeze the hero height to the viewport size captured by JS on load
+     and orientation change (see main.jsx). This stops the iPad/mobile
+     URL bar hiding during scroll from resizing the hero and "zooming"
+     the background image. Falls back to 100svh on browsers without JS. */
+  height: var(--app-height, 100svh);
+  min-height: var(--app-height, 100svh);
 }
 
 .layer {
