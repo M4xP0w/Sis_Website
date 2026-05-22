@@ -57,34 +57,31 @@ export default function Nav() {
     return 0;
   };
 
-  const jump = (id) => {
-    if (id === "hero") {
-      if (window.lenis) {
-        window.lenis.resize();
-        window.lenis.scrollTo("top", {
-          duration: 1.2,
-          force: true,
-          lock: true,
-          onComplete: () => {
-            // Tiny final correction after the smooth scroll, so Home reaches true 0.
-            window.lenis?.scrollTo(0, { immediate: true, force: true });
-          },
-        });
-        return;
-      }
+  // Smooth ease-out curve — fast at the start, gentle deceleration at the end.
+  const scrollEasing = (t) => 1 - Math.pow(1 - t, 3);
 
+  const jump = (id) => {
+    const offset = getScrollOffset(id);
+
+    // Lenis path — consistent duration + easing for every nav target.
+    if (window.lenis) {
+      const target = id === "hero" ? 0 : document.getElementById(id);
+      if (target !== null) {
+        window.lenis.scrollTo(target, {
+          duration: 1.2,
+          easing: scrollEasing,
+          offset,
+        });
+      }
+      return;
+    }
+
+    // Fallback for environments without Lenis (server-rendered, no-JS, etc.)
+    if (id === "hero") {
       window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
       return;
     }
-
     const target = document.getElementById(id);
-    const offset = getScrollOffset(id);
-
-    if (target && window.lenis) {
-      window.lenis.scrollTo(target, { force: true, offset });
-      return;
-    }
-
     if (target) {
       window.scrollTo({
         top: target.getBoundingClientRect().top + window.scrollY + offset,
