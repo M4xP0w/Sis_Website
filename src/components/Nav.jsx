@@ -4,13 +4,22 @@ import clouds from "../assets/clouds.webp";
 import mobileSignFull from "../assets/Emilee and Stella_full.apng";
 import mobileSignWritten from "../assets/Emilee and Stella_written.apng";
 
-// Tailwind breakpoint reminder:
-// no prefix = phones / default, sm = 640px+, md = 768px+, lg = 1024px+, xl = 1280px+, 2xl = 1536px+.
-// A 1440px wide screen uses xl. If xl exists, lg mostly controls 1024px-1279px.
-// A 1920px wide screen uses 2xl, so you can tune it separately from 1440px.
-// clamp(min, preferred, max) changes smoothly between screen sizes instead of jumping.
-// Example: top-[clamp(-65px,calc(60px-8vw),34px)] moves down on small screens
-// and moves up on larger screens without needing a separate value for every width.
+// 🔧 Emilee & Stella sign Y position (px). Negative = HIGHER on screen.
+// One knob per width tier — no clamp/calc math, just a plain pixel number.
+//   no prefix = phones                       (under 640px)
+//   sm        = large phones                 (640-767px)
+//   md        = tablets / iPad portrait      (768-1023px)
+//   lg        = iPad landscape               (1024-1279px)
+//   xl        = laptops / small displays     (1280-1535px)
+//   2xl       = 1080p monitors               (1536-1999px)
+//   3xl       = 1440p+ monitors (incl. 4K)   (2000px and up)
+const SIGN_Y_PHONE = -8;
+const SIGN_Y_SM    = -12;
+const SIGN_Y_MD    = -55;
+const SIGN_Y_LG    = -65;
+const SIGN_Y_XL    = -90;
+const SIGN_Y_2XL   = -105;
+const SIGN_Y_3XL   = -165;
 function NavButton({ label, onClick, delayClass = "" }) {
   return (
     <button
@@ -155,23 +164,32 @@ export default function Nav() {
       </nav>
 
       {/* Emilee/Stella sign:
-          top moves it up/down, left moves it sideways, w/max-w change size.
-          Phones stack this centered above the buttons.
-          This uses clamp so the sign moves down as the screen gets smaller
-          instead of getting cut off by the top of the browser. */}
+          Y position uses the SIGN_Y_* knobs at the top of this file — one
+          plain pixel value per width tier. Edit those to move the sign up
+          or down per layout. Left/width still use clamp() for now. */}
       <div
+        style={{
+          "--sign-y-phone": `${SIGN_Y_PHONE}px`,
+          "--sign-y-sm":    `${SIGN_Y_SM}px`,
+          "--sign-y-md":    `${SIGN_Y_MD}px`,
+          "--sign-y-lg":    `${SIGN_Y_LG}px`,
+          "--sign-y-xl":    `${SIGN_Y_XL}px`,
+          "--sign-y-2xl":   `${SIGN_Y_2XL}px`,
+          "--sign-y-3xl":   `${SIGN_Y_3XL}px`,
+        }}
         className="
           pointer-events-none absolute z-10 object-contain
-          left-1/2 top-[-8px] w-[100vw] max-w-[420px] -translate-x-1/2 translate-y-[clamp(-35%,-80%,-300%)]
-          sm:top-[-12px] sm:w-[72vw] sm:max-w-[430px]
-          md:left-[clamp(0.75rem,2vw,2.5rem)] md:top-[clamp(-58px,calc(42px-12vw),10px)]
+          left-1/2 top-[var(--sign-y-phone)] w-[100vw] max-w-[420px] -translate-x-1/2 translate-y-[clamp(-35%,-80%,-300%)]
+          sm:top-[var(--sign-y-sm)] sm:w-[72vw] sm:max-w-[430px]
+          md:left-[clamp(0.75rem,2vw,2.5rem)] md:top-[var(--sign-y-md)]
           md:w-[clamp(390px,52vw,620px)] md:max-w-[620px] md:translate-x-0 md:translate-y-0
-          lg:left-10 lg:top-[clamp(-65px,calc(-40px-15vw),-50px)]
+          lg:left-10 lg:top-[var(--sign-y-lg)]
           lg:w-[clamp(390px,32vw,580px)] lg:max-w-[800px]
-          xl:left-[clamp(2.5rem,3vw,4rem)] xl:top-[clamp(-95px,calc(10px-7vw),-70px)]
+          xl:left-[clamp(2.5rem,3vw,4rem)] xl:top-[var(--sign-y-xl)]
           xl:w-[clamp(530px,30vw,720px)] xl:max-w-[720px]
-          2xl:left-10 2xl:top-[clamp(-240px,calc(-70px-2vw),-50px)]
+          2xl:left-10 2xl:top-[var(--sign-y-2xl)]
           2xl:w-[30vw] 2xl:max-w-[800px]
+          3xl:top-[var(--sign-y-3xl)]
         "
       >
         {/* Mobile uses APNG because some phone browsers render transparent WebM as black.

@@ -6,6 +6,13 @@ export default {
   ],
   theme: {
     extend: {
+      // Extra breakpoint above the default 2xl (1536px) so 1440p+ monitors
+      // can be tuned separately from 1080p screens.
+      //   2xl: 1536-1999 (catches 1080p / 1920×1080)
+      //   3xl: 2000+     (catches 1440p / 2560×1440 and 4K / 3840×2160)
+      screens: {
+        "3xl": "2000px",
+      },
       colors: {
         brandPink: "#FF4F8B",
         brandBlue: "#3C6FFF",
