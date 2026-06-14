@@ -19,7 +19,7 @@ const SIGN_Y_MD    = -55;
 const SIGN_Y_LG    = -65;
 const SIGN_Y_XL    = -90;
 const SIGN_Y_2XL   = -115;
-const SIGN_Y_3XL   = -165;
+const SIGN_Y_3XL   = -125;
 // Exact 2560x1600 laptop override. This only applies when the real screen
 // reports 2560x1600 and the browser viewport is also wide.
 const SIGN_Y_2560_1600 = -100;
