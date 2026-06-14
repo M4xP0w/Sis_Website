@@ -13,13 +13,16 @@ import mobileSignWritten from "../assets/Emilee and Stella_written.apng";
 //   xl        = laptops / small displays     (1280-1535px)
 //   2xl       = 1080p monitors               (1536-1999px)
 //   3xl       = 1440p+ monitors (incl. 4K)   (2000px and up)
-const SIGN_Y_PHONE = -8;
+const SIGN_Y_PHONE = -10;
 const SIGN_Y_SM    = -12;
 const SIGN_Y_MD    = -55;
 const SIGN_Y_LG    = -65;
 const SIGN_Y_XL    = -90;
-const SIGN_Y_2XL   = -105;
+const SIGN_Y_2XL   = -115;
 const SIGN_Y_3XL   = -165;
+// Exact 2560x1600 laptop override. This only applies when the real screen
+// reports 2560x1600 and the browser viewport is also wide.
+const SIGN_Y_2560_1600 = -100;
 function NavButton({ label, onClick, delayClass = "" }) {
   return (
     <button
@@ -44,6 +47,7 @@ function NavButton({ label, onClick, delayClass = "" }) {
 
 export default function Nav() {
   const [showWrittenSign, setShowWrittenSign] = useState(false);
+  const [use2560SignY, setUse2560SignY] = useState(false);
 
   useEffect(() => {
     const signTimer = window.setTimeout(() => {
@@ -52,6 +56,25 @@ export default function Nav() {
 
     return () => {
       window.clearTimeout(signTimer);
+    };
+  }, []);
+
+  useEffect(() => {
+    const update2560SignY = () => {
+      const screenWidth = window.screen?.width ?? 0;
+      const screenHeight = window.screen?.height ?? 0;
+      const screenMatches2560 =
+        (screenWidth === 2560 && screenHeight === 1600) ||
+        (screenWidth === 1600 && screenHeight === 2560);
+
+      setUse2560SignY(screenMatches2560 && window.innerWidth >= 2400);
+    };
+
+    update2560SignY();
+    window.addEventListener("resize", update2560SignY);
+
+    return () => {
+      window.removeEventListener("resize", update2560SignY);
     };
   }, []);
 
@@ -176,10 +199,12 @@ export default function Nav() {
           "--sign-y-xl":    `${SIGN_Y_XL}px`,
           "--sign-y-2xl":   `${SIGN_Y_2XL}px`,
           "--sign-y-3xl":   `${SIGN_Y_3XL}px`,
+          "--sign-y-2560-1600": `${SIGN_Y_2560_1600}px`,
+          top: use2560SignY ? "var(--sign-y-2560-1600)" : undefined,
         }}
         className="
           pointer-events-none absolute z-10 object-contain
-          left-1/2 top-[var(--sign-y-phone)] w-[100vw] max-w-[420px] -translate-x-1/2 translate-y-[clamp(-35%,-80%,-300%)]
+          left-1/2 top-[var(--sign-y-phone)] w-[90vw] max-w-[420px] -translate-x-1/2 translate-y-[clamp(-35%,-80%,-300%)]
           sm:top-[var(--sign-y-sm)] sm:w-[72vw] sm:max-w-[430px]
           md:left-[clamp(0.75rem,2vw,2.5rem)] md:top-[var(--sign-y-md)]
           md:w-[clamp(390px,52vw,620px)] md:max-w-[620px] md:translate-x-0 md:translate-y-0

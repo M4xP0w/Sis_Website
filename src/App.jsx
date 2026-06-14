@@ -192,14 +192,9 @@ export default function App() {
                   Meet Emilee Powell
                 </h2>
                 <p className="mt-5 text-lg leading-8 text-emerald-950/75">
-                  Emilee is the author behind Stella&apos;s stories, creating
-                  bright children&apos;s books that invite young readers to care
-                  for the earth, grow good things, and notice the beauty in the
-                  people around them.
-                </p>
-                <p className="mt-4 text-lg leading-8 text-emerald-950/70">
-                  This space can grow into a full author bio with her story,
-                  inspiration, school visits, and contact details.
+                  Emilee Powell writes bright children&apos;s books that
+                  encourage young readers to care for the earth, grow good
+                  things, and see the beauty in others.
                 </p>
                 <div className="mt-7 h-px w-full bg-gradient-to-r from-emerald-800/40 via-amber-700/30 to-transparent" />
                 <p className="mt-4 text-sm font-black uppercase tracking-[0.24em] text-emerald-900/55">
